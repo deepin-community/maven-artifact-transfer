@@ -1,9 +1,28 @@
 Description: Fixes the compatibility with the version of Maven in Debian
 Author: Emmanuel Bourg <ebourg@apache.org>
 Forwarded: no
---- a/src/main/java/org/apache/maven/shared/dependencies/collect/internal/Maven31ArtifactRepositoryAdapter.java
-+++ b/src/main/java/org/apache/maven/shared/dependencies/collect/internal/Maven31ArtifactRepositoryAdapter.java
-@@ -263,4 +263,13 @@
+--- a/src/main/java/org/apache/maven/shared/transfer/dependencies/collect/internal/Maven31ArtifactRepositoryAdapter.java
++++ b/src/main/java/org/apache/maven/shared/transfer/dependencies/collect/internal/Maven31ArtifactRepositoryAdapter.java
+@@ -165,6 +165,18 @@
+     }
+ 
+     @Override
++    public boolean isBlocked()
++    {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
++    public void setBlocked( boolean blocked )
++    {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
+     public Artifact find( Artifact artifact )
+     {
+         throw new UnsupportedOperationException();
+@@ -263,4 +275,13 @@
          }
          return true;
      }
@@ -17,20 +36,38 @@ Forwarded: no
 +    {
 +    }
  }
---- a/pom.xml
-+++ b/pom.xml
-@@ -88,12 +88,12 @@
-             <configuration>
-               <artifactSet>
-                 <includes>
--                  <include>org.eclipse.aether:aether-util</include>
-+                  <include>org.apache.maven.resolver:maven-resolver-util</include>
-                 </includes>
-               </artifactSet>
-               <filters>
-                 <filter>
--                  <artifact>org.eclipse.aether:aether-util</artifact>
-+                  <artifact>org.apache.maven.resolver:maven-resolver-util</artifact>
-                   <includes>
-                     <!-- to prevent java.lang.ClassNotFoundException: org.eclipse.aether.util.artifact.SubArtifact (M3.1.1 - M3.3.3) -->
-                     <include>org/eclipse/aether/util/artifact/SubArtifact.class</include>
+--- a/src/main/java/org/apache/maven/shared/transfer/collection/internal/Maven31ArtifactRepositoryAdapter.java
++++ b/src/main/java/org/apache/maven/shared/transfer/collection/internal/Maven31ArtifactRepositoryAdapter.java
+@@ -165,6 +165,18 @@
+     }
+ 
+     @Override
++    public boolean isBlocked()
++    {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
++    public void setBlocked( boolean blocked )
++    {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
+     public Artifact find( Artifact artifact )
+     {
+         throw new UnsupportedOperationException();
+@@ -262,4 +274,13 @@
+         }
+         return true;
+     }
++
++    public List<ArtifactRepository> getMirroredRepositories()
++    {
++        return java.util.Collections.emptyList();
++    }
++
++    public void setMirroredRepositories( List<ArtifactRepository> mirroredRepositories )
++    {
++    }
+ }

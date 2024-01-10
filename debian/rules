@@ -3,5 +3,29 @@
 %:
 	dh $@
 
-get-orig-source:
-	uscan --download-current-version --force-download --rename
+override_dh_auto_build:
+	# Duplicate and relocate the classes to preserve the backward compatibility
+	mkdir -p target/sources/compat
+	cp -Rvp src/main/java/* target/sources/compat/
+	mv target/sources/compat/org/apache/maven/shared/transfer/artifact     target/sources/compat/org/apache/maven/shared/
+	mv target/sources/compat/org/apache/maven/shared/transfer/collection   target/sources/compat/org/apache/maven/shared/
+	mv target/sources/compat/org/apache/maven/shared/transfer/dependencies target/sources/compat/org/apache/maven/shared/
+	mv target/sources/compat/org/apache/maven/shared/transfer/graph        target/sources/compat/org/apache/maven/shared/
+	mv target/sources/compat/org/apache/maven/shared/transfer/metadata     target/sources/compat/org/apache/maven/shared/
+	mv target/sources/compat/org/apache/maven/shared/transfer/project      target/sources/compat/org/apache/maven/shared/
+	mv target/sources/compat/org/apache/maven/shared/transfer/repository   target/sources/compat/org/apache/maven/shared/
+	find target/sources/compat -type f -exec sed -i 's/org.apache.maven.shared.transfer/org.apache.maven.shared/g' {} +
+	cp -Rvp target/sources/compat/* src/main/java/
+
+	dh_auto_build
+
+override_dh_auto_clean:
+	dh_auto_clean
+
+	rm -Rf src/main/java/org/apache/maven/shared/artifact
+	rm -Rf src/main/java/org/apache/maven/shared/collection
+	rm -Rf src/main/java/org/apache/maven/shared/dependencies
+	rm -Rf src/main/java/org/apache/maven/shared/graph
+	rm -Rf src/main/java/org/apache/maven/shared/metadata
+	rm -Rf src/main/java/org/apache/maven/shared/project
+	rm -Rf src/main/java/org/apache/maven/shared/repository
