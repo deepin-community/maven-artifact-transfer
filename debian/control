@@ -4,20 +4,24 @@ Priority: optional
 Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
 Uploaders: Emmanuel Bourg <ebourg@apache.org>
 Build-Depends:
- debhelper (>= 10),
+ debhelper-compat (= 13),
  default-jdk,
  junit4,
+ libeclipse-sisu-maven-plugin-java,
  libmaven3-core-java,
  libmaven-common-artifact-filters-java (>= 3.0),
+ libmaven-parent-java,
  libmaven-plugin-testing-java,
  libmaven-resolver-java,
  libmaven-shade-plugin-java,
+ libmockito-java,
+ libmodello-maven-plugin-java,
  libplexus-component-annotations-java (>= 1.7.1-6~),
  libplexus-component-metadata-java,
  maven-debian-helper (>= 2.2)
-Standards-Version: 4.1.1
-Vcs-Git: https://anonscm.debian.org/git/pkg-java/maven-artifact-transfer.git
-Vcs-Browser: https://anonscm.debian.org/cgit/pkg-java/maven-artifact-transfer.git
+Standards-Version: 4.6.2
+Vcs-Git: https://salsa.debian.org/java-team/maven-artifact-transfer.git
+Vcs-Browser: https://salsa.debian.org/java-team/maven-artifact-transfer
 Homepage: http://maven.apache.org/shared/maven-artifact-transfer/
 
 Package: libmaven-artifact-transfer-java

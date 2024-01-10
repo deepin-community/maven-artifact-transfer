@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
+  or more contributor license agreements. See the NOTICE file
   distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
+  regarding copyright ownership. The ASF licenses this file
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
+  with the License. You may obtain a copy of the License at
 
   http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
+  KIND, either express or implied. See the License for the
   specific language governing permissions and limitations
   under the License.
 -->
@@ -23,39 +23,69 @@
   <parent>
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
-    <version>30</version>
+    <version>34</version>
     <relativePath>../../pom/maven/maven-shared-components/pom.xml</relativePath>
   </parent>
 
   <artifactId>maven-artifact-transfer</artifactId>
-  <version>0.9.1</version>
+  <version>0.13.1</version>
 
   <name>Apache Maven Artifact Transfer</name>
   <description>An API to install, deploy and resolving artifacts with Maven 3</description>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/shared/tags/maven-artifact-transfer-0.9.1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/tags/maven-artifact-transfer-0.9.1
-    </developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/shared/tags/maven-artifact-transfer-0.9.1</url>
+    <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-artifact-transfer.git</connection>
+    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-artifact-transfer.git</developerConnection>
+    <url>https://github.com/apache/maven-artifact-transfer/tree/${project.scm.tag}</url>
+    <tag>maven-artifact-transfer-0.13.1</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/MSHARED/component/12327114</url>
+    <url>https://issues.apache.org/jira/browse/MSHARED</url>
   </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://ci-builds.apache.org/job/Maven/job/maven-box/job/maven-artifact-transfer/</url>
+  </ciManagement>
   <distributionManagement>
     <site>
       <id>apache.website</id>
-      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/components/${maven.site.path}</url>
+      <url>scm:svn:https://svn.apache.org/repos/asf/maven/website/components/${maven.site.path}</url>
     </site>
   </distributionManagement>
+  
+  <properties>
+    <javaVersion>7</javaVersion>
+    <project.build.outputTimestamp>2020-12-22T10:31:40Z</project.build.outputTimestamp>
+  </properties>
 
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.maven.shared.artifact.transfer</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+            <showDeprecation>true</showDeprecation>
+            <compilerArgs>
+              <arg>-Xlint:deprecation</arg>
+              <arg>-Xlint:unchecked</arg>
+            </compilerArgs>
+          </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-component-metadata</artifactId>
-        <version>1.7.1</version>
         <executions>
           <execution>
             <goals>
@@ -67,7 +97,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -101,13 +130,17 @@
         <configuration>
           <excludes combine.children="append">
             <exclude>dependency-reduced-pom.xml</exclude>
+            <exclude>src/it/**/.settings/**</exclude>
+            <exclude>src/it/**/.project</exclude>
+            <exclude>src/it/**/.classpath</exclude>
+            <exclude>src/it/**/target/**</exclude>
           </excludes>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.15</version>
+        <version>1.19</version>
         <executions>
           <execution>
             <id>sniff</id>
@@ -120,26 +153,10 @@
         <configuration>
           <signature>
             <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java16</artifactId>
-            <version>1.1</version>
+            <artifactId>java17</artifactId>
+            <version>1.0</version>
           </signature>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-bytecode-version</id>
-            <configuration>
-              <rules>
-                <enforceBytecodeVersion>
-                  <maxJdkVersion>1.6</maxJdkVersion>
-                </enforceBytecodeVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
@@ -159,24 +176,17 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-component-annotations</artifactId>
-      <version>1.7.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-common-artifact-filters</artifactId>
-      <version>3.0.1</version>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.0.24</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.6</version>
+      <version>3.3.0</version>
     </dependency>
 
     <!-- Maven 3.0.x -->
@@ -229,22 +239,86 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>2.28.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>plexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/plexus-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+  <profiles>
+    <profile>
+      <id>run-its</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>3.0.7</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.gmaven.runtime</groupId>
+                <artifactId>gmaven-runtime-2.0</artifactId>
+                <version>1.5</version>
+              </dependency>
+            </dependencies>
+            <configuration>
+              <addTestClassPath>true</addTestClassPath>
+              <debug>false</debug>
+              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+              <projectsDirectory>src/it</projectsDirectory>
+              <showVersion>false</showVersion>
+              <pomIncludes>
+                <pomInclude>*/pom.xml</pomInclude>
+              </pomIncludes>
+              <preBuildHookScript>setup</preBuildHookScript>
+              <postBuildHookScript>verify</postBuildHookScript>
+              <settingsFile>src/it/settings.xml</settingsFile>
+              <!-- Currently working with more than one thread does not work, cause
+                it is not guaranteed that the setup-config project is build at first. see
+                also http://jira.codehaus.org/browse/MINVOKER-147 -->
+              <parallelThreads>1</parallelThreads>
+              <filterProperties>
+                <repository.proxy.url>${repository.proxy.url}</repository.proxy.url>
+                <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+              </filterProperties>
+              <extraArtifacts>
+                <extraArtifact>org.apache.maven:apache-maven:3.0.5:tar.gz:bin</extraArtifact>
+                <extraArtifact>org.apache.maven:apache-maven:3.1.1:tar.gz:bin</extraArtifact>
+                <extraArtifact>org.apache.maven:apache-maven:3.2.5:tar.gz:bin</extraArtifact>
+                <extraArtifact>org.apache.maven:apache-maven:3.3.1:tar.gz:bin</extraArtifact>
+                <extraArtifact>org.apache.maven:apache-maven:3.3.9:tar.gz:bin</extraArtifact>
+                <extraArtifact>org.apache.maven:apache-maven:3.5.0:tar.gz:bin</extraArtifact>
+              </extraArtifacts>
+            </configuration>
+            <executions>
+              <execution>
+                <id>pre-integration-tests</id>
+                <goals>
+                  <goal>install</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>integration-tests</id>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
 
+      </build>
+    </profile>
+  </profiles>
 </project>

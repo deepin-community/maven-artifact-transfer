@@ -1,3 +1,32 @@
+maven-artifact-transfer (0.13.1-2) unstable; urgency=medium
+
+  * Fixed the build failure with Maven 3.8 (Closes: #1021549)
+  * Depend on libmaven-parent-java
+  * Standards-Version updated to 4.6.2
+
+ -- Emmanuel Bourg <ebourg@apache.org>  Thu, 12 Jan 2023 12:35:32 +0100
+
+maven-artifact-transfer (0.13.1-1) unstable; urgency=medium
+
+  * New upstream release
+    - Refreshed the patches
+    - Copy the collection, graph & metadata packages to org.apache.maven.shared
+  * Standards-Version updated to 4.6.1
+
+ -- Emmanuel Bourg <ebourg@apache.org>  Tue, 27 Sep 2022 13:50:44 +0200
+
+maven-artifact-transfer (0.11.0-1) unstable; urgency=medium
+
+  * New upstream release
+    - Refreshed the patches
+    - Build a copy of the classes in the old org.apache.maven.shared package
+      to preserve the backward compatibility
+  * Standards-Version updated to 4.6.0.1
+  * Switch to debhelper level 13
+  * Track and download the new releases from GitHub
+
+ -- Emmanuel Bourg <ebourg@apache.org>  Tue, 03 May 2022 17:16:06 +0200
+
 maven-artifact-transfer (0.9.1-4) unstable; urgency=medium
 
   * Depend on libmaven-resolver-java instead of libeclipse-aether-java
